@@ -1,0 +1,23 @@
+.fit-cover {
+  object-fit: cover;
+}
+
+.post-meta {
+  font-size: 18px;
+  font-style: italic;
+  margin-top: 0;
+  color: #6c757d;
+}
+
+.post-preview > .post-meta > a:focus, .post-preview > .post-meta > a:hover {
+  text-decoration: underline;
+  color: #0085a1;
+}
+
+.text-uppercase {
+  text-transform: none !important;
+}
+
+.post-subtitle {
+}
+
