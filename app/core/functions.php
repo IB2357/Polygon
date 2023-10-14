@@ -19,10 +19,10 @@ function redirect($page){
     die;
 }
 
-function old_value($key){
+function old_value($key, $default = ''){
     if(!empty($_POST[$key]))
         return $_POST[$key];
-    return "";
+    return $default;
 }
 
 function authenticate($user){
@@ -48,4 +48,12 @@ function slug_creater($str){
 // escape HTML injections
 function esc($str){
     return htmlspecialchars($str ?? '');
+}
+
+function get_image($file,$placeholder = 'image_placeholder.svg'){
+    $file = $file ?? '';
+    if(file_exists($file))
+        return ROOT.'/'.$file;
+    return ROOT.'/assets/img/'.$placeholder ;
+
 }

@@ -1,7 +1,7 @@
 <?php
-
+echo "</pre>";
 print_r($_SESSION['user']) .br;
-
+echo "</pre>";
 $s = "  hi my name is 323 dd--~`'cd'']}f>< ابراهيم سلطان ";
 
 echo $s .br;

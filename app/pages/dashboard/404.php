@@ -28,8 +28,8 @@
 
 <body>
     <div class="container">
-        <div class="row">
-            <div class="col-md-10 col-lg-8 mx-auto">
+        <div class="row my-5">
+            <div class="col-md-6 mx-auto">
                 <h1>Page Note Found 404</h1>
             </div>
         </div>
