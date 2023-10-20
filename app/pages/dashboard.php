@@ -1,6 +1,6 @@
 <?php
     if(!logged_in())
-        redirect(ROOT.'/login');
+        redirect('login');
 
     $section = $url[1] ?? 'home';
     $action = $url[2] ?? 'view';
@@ -8,9 +8,9 @@
     $file_name = "../app/pages/dashboard/".$section.".php";
 
     if(file_exists($file_name)){
-
         require_once $file_name;
-        include_once "dashboard/sidebar.php";
+        if(!$action || $action == "view")
+            include_once "dashboard/sidebar.php";
     }
     else{
         require_once "../app/pages/dashboard/404.php";

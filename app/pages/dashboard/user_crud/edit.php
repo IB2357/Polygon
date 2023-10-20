@@ -24,13 +24,15 @@ if (!empty($_POST)) {
     } elseif ($_POST['password'] !== $_POST['confirmpass']) {
         $errors['password'] = "Password and confirming Password do not match ";
     }
-    // image
+    // profile_image
     $allowed_imgs = ['image/jpeg', 'image/png', 'image/webp'];
     if (!empty($_FILES['profile_img']['name'])) {
-        if (!in_array($_FILES['profile_img']['name'], $allowed_imgs)) {
-            $errors['profile_img'] = "Image format not supported";
+        if (!in_array($_FILES['profile_img']['type'], $allowed_imgs)) {
+            $errors['profile_img'] = "Image format is not supported";
         } else {
-
+            $destination = 'uploads/' . time() . basename($_FILES["profile_img"]["name"]);
+            move_uploaded_file($_FILES['profile_img']['tmp_name'], $destination);
+            resize_image($destination);
         }
     }
 
@@ -41,21 +43,41 @@ if (!empty($_POST)) {
         $data = [];
         $data['full_name'] = $_POST['full_name'];
         $data['email'] = $_POST['email'];
-        $data['profile_img'] = $_POST['profile_img'];
-        $data['about'] = $_POST['about'];
+        // $data['profile_img'] = $_POST['profile_img'];
+        // $data['about'] = $_POST['about'];
         $data['role_id'] = $_POST['role'];
         $data['id'] = $id;
 
         // check if password empty
-        if (empty($_POST['password'])) {
-            $update_q = "UPDATE user SET full_name = :full_name, email = :email, profile_img = :profile_img, about = :about, role_id = :role_id WHERE id = :id LIMIT 1";
-        } else {
+        // if (empty($_POST['password'])) {
+        //     $update_q = "UPDATE user SET full_name = :full_name, email = :email, profile_img = :profile_img, about = :about, role_id = :role_id WHERE id = :id LIMIT 1";
+        // } else {
+        //     $data['password'] = password_hash($_POST['password'], PASSWORD_DEFAULT);
+        //     $update_q = "UPDATE user SET full_name = :full_name, email = :email, profile_img = :profile_img, about = :about, password = :password, role_id = :role_id WHERE id = :id LIMIT 1";
+        // }
+
+        ///////////////
+        $password_str = "";
+        $image_str = "";
+        $about_str = "";
+
+        if (!empty($_POST['about'])) {
+            $data['about'] = $_POST['about'];
+            $about_str = "about = :about, ";
+        }
+        if (!empty($_POST['password'])) {
             $data['password'] = password_hash($_POST['password'], PASSWORD_DEFAULT);
-            $update_q = "UPDATE user SET full_name = :full_name, email = :email, profile_img = :profile_img, about = :about, password = :password, role_id = :role_id WHERE id = :id LIMIT 1";
+            $password_str = "password = :password, ";
+        }
+        if (!empty($destination)) {
+            $data['profile_img'] = $destination;
+            $image_str = "profile_img = :profile_img, ";
         }
 
+        $update_q = "UPDATE user SET full_name = :full_name, email = :email, $image_str $about_str $password_str role_id = :role_id WHERE id = :id LIMIT 1";
+
         query($update_q, $data);
-        redirect('../users');
+        redirect('dashboard/users');
     }
 }
 ?>
@@ -80,21 +102,25 @@ if (!empty($_POST)) {
             position: relative;
             width: 250px;
             height: 250px;
-            
+
         }
-        .img-label{
+
+        .img-label {
             border: 1px solid #111;
         }
+
         .image {
             width: 100%;
             height: 100%;
-            object-fit:cover; 
-            cursor:pointer;
+            object-fit: cover;
+            cursor: pointer;
             transition: filter 0.5s, transform 0.5s;
         }
+
         .image:hover {
             filter: brightness(0.6);
         }
+
         .image-text {
             position: absolute;
             color: white;
@@ -115,33 +141,22 @@ if (!empty($_POST)) {
 
 <body>
     <div class="container profile profile-view">
-        <form method="post">
+        <form method="post" enctype="multipart/form-data">
             <div class="form-row profile-row">
                 <div class="col-md-8 p-5 mx-auto" style="border-style: solid;">
-                    <h1>Editing User #
-                        <?= $row[0]['id'] ?>
+                    <h1>Editing User 
+                        <strong>"<?= $row[0]['full_name'] ?>"</strong>
                     </h1>
                     <div class="avatar" style="margin-top: 18px;">
 
                         <div class="center my-5">
-                            <!-- <label>
-                                <img class="image-preview-edit"
-                                    src="<?= get_image($row[0]['profile_img'], 'avatar.png') ?>"
-                                    style="width:250px; hight:250px; object-fit:cover; cursor:pointer; " alt="">
-                                <input onchange="display_image_onchange(this.files[0])" hidden
-                                    class="form-control-file form-control mb-5 mx-auto" type="file" name="profile_img"
-                                    style="width:250px; hight:250px; ">
-                            </label> -->
                             <label class="img-label">
                                 <div class="image-container">
-                                    <img src="<?= get_image($row[0]['profile_img'], 'avatar.png') ?>" 
-                                    alt="Image profile" class="image image-preview-edit"
-                                    style="width:250px; hight:250px; object-fit:cover; cursor:pointer; " >
+                                    <img src="<?= get_image($row[0]['profile_img'], 'avatar.png') ?>"
+                                        alt="Image profile" class="image image-preview-edit"
+                                        style="width:250px; hight:250px; object-fit:cover; cursor:pointer; ">
                                     <div class="image-text">Change</div>
                                 </div>
-                                <!-- <img class="image-preview-edit"
-                                    src="<?= get_image($row[0]['profile_img'], 'avatar.png') ?>"
-                                    style="width:250px; hight:250px; object-fit:cover; cursor:pointer; " alt=""> -->
                                 <input onchange="display_image_onchange(this.files[0])" hidden
                                     class="form-control-file form-control mb-5 mx-auto" type="file" name="profile_img"
                                     style="width:250px; hight:250px; ">
@@ -149,9 +164,13 @@ if (!empty($_POST)) {
                             <script>
                                 function display_image_onchange(file) {
                                     document.querySelector(".image-preview-edit").src = URL.createObjectURL(file);
-
                                 }
                             </script>
+                            <?php if (!empty($errors['profile_img'])): ?>
+                                <div class="text-danger mb-3 mt-1">
+                                    <?= $errors['profile_img'] ?>
+                                </div>
+                            <?php endif; ?>
                         </div>
 
                         <div class="form-row">

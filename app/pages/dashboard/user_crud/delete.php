@@ -5,7 +5,7 @@ if (!empty($_POST)) {
 
     $delete_q = "DELETE FROM user WHERE id = :id LIMIT 1";
     query($delete_q, $data);
-    redirect('../../users');
+    redirect('dashboard/users');
 
 }
 ?>

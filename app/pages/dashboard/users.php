@@ -1,10 +1,14 @@
 <?php
+$limit = 10;
+$offset = ($PAGE['page_number']-1)*$limit;
 $select_users =
     "SELECT u.id, u.full_name, u.email, u.profile_img, u.date, r.name AS `role`
 FROM user u
 JOIN role r 
 ON u.role_id = r.id
-ORDER BY u.date";
+ORDER BY u.date
+LIMIT $limit
+OFFSET $offset";
 $rows = query($select_users);
 
 ?>
@@ -48,6 +52,7 @@ $rows = query($select_users);
         <link rel="stylesheet" href="<?= ROOT ?>/assets/css/Off-Canvas-Sidebar-Drawer-Navbar.css">
         <link rel="stylesheet" href="<?= ROOT ?>/assets/css/Profile-Edit-Form-styles.css">
         <link rel="stylesheet" href="<?= ROOT ?>/assets/css/Profile-Edit-Form.css">
+        <link rel="stylesheet" href="<?= ROOT ?>/assets/css/Gamanet_Pagination_bs5.css">
     </head>
 
     <body>
@@ -68,14 +73,17 @@ $rows = query($select_users);
                         <th>Creation Date</th>
                         <th>Action</th>
                     </tr>
+
                     <?php if (!empty($rows)): ?>
+                        <?php $counter = 0; ?>
                         <?php foreach ($rows as $row): ?>
+                            <?php $counter++; ?>
                             <tr>
                                 <td>
-                                    <?= esc($row['id']) ?>
+                                    <?= esc($counter) ?>
                                 </td>
                                 <td>
-                                    <img src="<?=get_image($row['profile_img'],'avatar.png')?>" style="width:100px; hight:100px; object-fit:cover;" alt="">
+                                    <img src="<?=get_image($row['profile_img'],'avatar.png')?>" style="width:100px; height:100px; object-fit:cover;" alt="profile image">
                                 </td>
                                 <td  class="pt-5">
                                     <?= esc($row['full_name']) ?>
@@ -101,6 +109,19 @@ $rows = query($select_users);
                         <?php endforeach; ?>
                     <?php endif; ?>
                 </table>
+            </div>
+            <hr>
+            <div id="pagination" class="d-flex justify-content-center" style="padding-bottom: 0px;">
+            <a
+            class="pagination-item <?=($PAGE['page_number']==1)?'disabled':'active'?>" href="<?=$PAGE['prev_link']?>"><img
+                src="<?= ROOT ?>/assets/img/icon_arrow-left.svg"><span>Previos</span>
+            </a>
+            <a class="pagination-item  <?=($PAGE['page_number']==1)?'disabled':'active'?>"
+            href="<?=$PAGE['first_link']?>">&nbsp;Home&nbsp;
+            </a>
+            <a class="pagination-item" href="<?=$PAGE['next_link']?>"><span>Next</span><img
+                src="<?= ROOT ?>/assets/img/icon_arrow-right.svg">
+            </a>
             </div>
         </main>
         <script src="<?= ROOT ?>/assets/js/jquery.min.js"></script>

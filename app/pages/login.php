@@ -16,7 +16,7 @@ if (!empty($_POST)) {
         $data = [];
         if (password_verify($_POST['password'], $row[0]['password'])) {
             authenticate($row[0]);
-            redirect(ROOT . '/dashboard/home');
+            redirect('/dashboard/home');
         }
     }
     $errors['email'] = "wrong email or password";
