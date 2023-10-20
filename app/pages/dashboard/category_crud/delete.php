@@ -3,12 +3,9 @@ if (!empty($_POST)) {
     $data = [];
     $data['id'] = $id;
 
-    $delete_q = "DELETE FROM user WHERE id = :id LIMIT 1";
+    $delete_q = "DELETE FROM category WHERE id = :id LIMIT 1";
     query($delete_q, $data);
-    if(file_exists($row[0]['profile_img']))
-                unlink($row[0]['profile_img']);
-    redirect('dashboard/users');
-
+    redirect('dashboard/categories');
 }
 ?>
 <!DOCTYPE html>
@@ -17,7 +14,7 @@ if (!empty($_POST)) {
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>users
+    <title>Delete category
         <?= APP_NAME ?>
     </title>
     <link rel="stylesheet" href="<?= ROOT ?>/assets/bootstrap/css/bootstrap.min.css">
@@ -34,36 +31,23 @@ if (!empty($_POST)) {
         <form method="post">
             <div class="form-row profile-row">
                 <div class="col-md-8 p-5 mx-auto" style="border-style: solid;">
-                    <h1>Delete Account #
+                    <h1>Delete category #
                         <?= $row[0]['id'] ?>
                     </h1>
 
-                    <div class="form-group"><label>Full name</label>
-                        <input readonly class="form-control" value="<?= old_value('full_name', $row[0]['full_name']) ?>"
-                            type="text" name="full_name">
-                        <?php if (!empty($errors['full_name'])): ?>
-                            <div class="text-danger mb-3 mt-1">
-                                <?= $errors['full_name'] ?>
-                            </div>
-                        <?php endif; ?>
+                    <div class="form-group"><label>Category</label>
+                        <input readonly class="form-control" value="<?=esc($row[0]['category'])?>"
+                            type="text" name="Category">
                     </div>
-
-
-
-                    <div class="form-group"><label>Email </label>
-                        <input readonly class="form-control" type="email"
-                            value="<?= old_value('email', $row[0]['email']) ?>" autocomplete="off" name="email">
-                        <?php if (!empty($errors['email'])): ?>
-                            <div class="text-danger mb-3 mt-1">
-                                <?= $errors['email'] ?>
-                            </div>
-                        <?php endif; ?>
+                    <div class="form-group"><label>Slug</label>
+                        <input readonly class="form-control" value="<?=esc($row[0]['slug'])?>"
+                            type="text" name="slug">
                     </div>
                     <div class="form-row">
                         <div class="col-md-12 content-right">
                             <input class="btn btn-primary form-btn mt-5" type="submit" value="Delete"
                                 style="background: rgb(0,0,0);margin-bottom: 0px;">
-                            <a href="<?= ROOT ?>/dashboard/users">
+                            <a href="<?= ROOT ?>/dashboard/categories">
                                 <span class="btn btn-primary form-btn mt-5"
                                     style="background: rgb(0,0,0);margin-bottom: 0px;">
                                     < Back</span>

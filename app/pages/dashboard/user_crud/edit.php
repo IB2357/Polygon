@@ -144,8 +144,10 @@ if (!empty($_POST)) {
         <form method="post" enctype="multipart/form-data">
             <div class="form-row profile-row">
                 <div class="col-md-8 p-5 mx-auto" style="border-style: solid;">
-                    <h1>Editing User 
-                        <strong>"<?= $row[0]['full_name'] ?>"</strong>
+                    <h1>Editing User
+                        <strong>"
+                            <?= $row[0]['full_name'] ?>"
+                        </strong>
                     </h1>
                     <div class="avatar" style="margin-top: 18px;">
 
@@ -191,17 +193,55 @@ if (!empty($_POST)) {
                                 <div class="form-group"><label>User Role</label>
                                     <select class="form-control" name="role">
                                         <?php
-                                        $roles = query("SELECT `id`, `name` FROM `role` WHERE id != :role_id", ['role_id' => $row[0]['role_id']]);
-                                        $user_role = query("SELECT `name` FROM `role` WHERE id = :role_id LIMIT 1", ['role_id' => $row[0]['role_id']]);
-                                        $id = $row[0]['role_id'];
-                                        $name = $user_role[0]['name'];
-                                        echo '<option value="' . "$id" . '"selected>' . "$name" . '</option>';
+                                        $roles = query("SELECT `id`, `name` FROM `role`");
+                                        // old_select :
+                                        $used_role = [];
+                                        if (!empty($_POST['role'])) {
+                                            $used_role['id'] = $_POST['role'];
+                                            foreach ($roles as $key => $value) {
+                                                if ($roles[$key]['id'] == $used_role['id']) {
+                                                    $used_role['name'] = $value['name'];
+                                                    unset($roles[$key]);
+                                                }
+                                            }
+                                        } else {
+                                            foreach ($roles as $key => $value) {
+                                                if ($roles[$key]['id'] == $row[0]['role_id']) {
+                                                    $used_role = $value;
+                                                    unset($roles[$key]);
+                                                }
+                                            }
 
+                                        }
+                                        $used_id = $used_role['id'];
+                                        $used_name = $used_role['name'];
+                                        
+                                        echo '<option value="' . "$used_id" . '"selected>' . "$used_name" . '</option>';
                                         foreach ($roles as $role) {
                                             $id = $role['id'];
                                             $name = $role['name'];
                                             echo '<option value="' . "$id" . '">' . "$name" . '</option>';
                                         }
+                                        
+                                        
+                                        // Different method 
+
+                                        // $roles = query("SELECT `id`, `name` FROM `role`");
+                                        // // old_select :
+                                        // $used_role = [];
+                                        // foreach ($roles as $key => $value) {
+                                        //     if ($roles[$key]['id'] == $row[0]['role_id']) {
+                                        //         $used_role = $value;
+                                        //     }
+                                        // }
+                                        // $used_id = $used_role['id'];
+                                        // $g = 1;
+                                        // foreach ($roles as $role) {
+                                        //     $id = $role['id'];
+                                        //     $name = $role['name'];
+                                        //     $old =old_select('role',$id,$used_id,$g);
+                                        //     echo "<option $old value='$id'>$name</option>";
+                                        // }
                                         ?>
                                     </select>
                                 </div>

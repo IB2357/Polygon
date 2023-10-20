@@ -17,16 +17,23 @@
     <style>
         .sticky-element {
             position: fixed;
-            top: 5px;
-            left: 5px;
-            background-color: #f1f1f1;
-            padding: 10px;
-            border: 1px solid #ccc;
+            top: 10px;
+            left: 12px;
+
         }
         .navbar {
             display: none;
             background-color: white;
+            /* opacity: .5; */
+            border: 1px solid rgba(0,0,0,0.5);
+            box-shadow: 0 8px 8px 0 rgba(0,0,0,37);
         }
+        /* .glass{
+            background: linear-gradient(135deg, rgba(255,255,255,0.3),rgba(255,255,255,.1));
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.18);
+            box-shadow: 0 8px 8px 0 rgba(0,0,0,37);
+        } */
     </style>
 </head>
 
@@ -35,8 +42,8 @@
         style="background: var(--white);color: rgb(0,0,0);border-width: 2px;border-style: solid;margin-right: -19px;"><i
             class="fas fa-bars"></i></button>
 
-    <nav class="navbar navbar-light fixed-top off-canvas" data-right-drawer="0" data-open-drawer="1"
-        style="background: rgb(255,255,255);color: rgb(0,0,0);border-right-style: solid;position: sticky;height: 100vh;">
+    <nav class="navbar navbar-light fixed-top off-canvas glass" data-right-drawer="0" data-open-drawer="1"
+        style="color: rgb(0,0,0);border-right-style: solid;position: sticky;height: 100vh;">
         <div class="container-fluid flex-column">
         <button class="btn btn-dark drawer-knob show-nav" type="button" data-open="drawer"
         style="background: var(--white);color: rgb(0,0,0);border-width: 2px;border-style: solid;margin-right: -19px;"><i
@@ -60,10 +67,10 @@
                 </span>
             </a>
             <ul class="navbar-nav flex-column drawer-menu">
-                <li class="nav-item"><a class="nav-link active" href="<?= ROOT ?>/dashboard/add_user">Add User +</a>
+                <li class="nav-item"><a class="nav-link <?=($section=='categories')?'active':''?>" href="<?= ROOT ?>/dashboard/categories">All Categories</a>
                 </li>
-                <li class="nav-item"><a class="nav-link" href="<?= ROOT ?>/dashboard/posts">All Posts</a></li>
-                <li class="nav-item"><a class="nav-link" href="<?= ROOT ?>/dashboard/users">All Users</a></li>
+                <li class="nav-item"><a class="nav-link <?=($section=='posts')?'active':''?>" href="<?= ROOT ?>/dashboard/posts">All Posts</a></li>
+                <li class="nav-item"><a class="nav-link <?=($section=='users')?'active':''?>" href="<?= ROOT ?>/dashboard/users">All Users</a></li>
 
             </ul>
             <ul class="navbar-nav flex-column drawer-menu">

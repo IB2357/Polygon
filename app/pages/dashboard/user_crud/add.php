@@ -134,8 +134,8 @@ if (!empty($_POST)) {
                         <div class="center my-5">
                             <label class="img-label">
                                 <div class="image-container">
-                                    <img src="<?= get_image('', 'avatar.png') ?>"
-                                        alt="Image profile" class="image image-preview-edit"
+                                    <img src="<?= get_image('', 'avatar.png') ?>" alt="Image profile"
+                                        class="image image-preview-edit"
                                         style="width:250px; hight:250px; object-fit:cover; cursor:pointer; ">
                                     <div class="image-text">Change</div>
                                 </div>
@@ -173,11 +173,43 @@ if (!empty($_POST)) {
                                     <select class="form-control" name="role">
                                         <?php
                                         $roles = query("SELECT `id`, `name` FROM `role`");
-                                        foreach ($roles as $row) {
-                                            $id = $row['id'];
-                                            $name = $row['name'];
-                                            echo '<option value="' . "$id" . '">' . "$name" . '</option>';
-                                        }
+                                        if (!empty($_POST['role'])) {
+                                            $used_role = [];
+                                            $used_role['id'] = $_POST['role'];
+                                            foreach ($roles as $key => $value) {
+                                                if ($roles[$key]['id'] == $used_role['id']) {
+                                                    $used_role['name'] = $value['name'];
+                                                    unset($roles[$key]);
+                                                }
+                                            }
+                                            $used_id = $used_role['id'];
+                                            $used_name = $used_role['name'];
+                                            echo '<option value="' . "$used_id" . '"selected>' . "$used_name" . '</option>';
+                                            foreach ($roles as $role) {
+                                                $id = $role['id'];
+                                                $name = $role['name'];
+                                                echo '<option value="' . "$id" . '">' . "$name" . '</option>';
+                                            }         
+                                        }else{
+                                            foreach ($roles as $role) {
+                                                $id = $role['id'];
+                                                $name = $role['name'];
+                                                echo '<option value="' . "$id" . '">' . "$name" . '</option>';
+                                            }
+                                        }              
+                                        
+
+
+                                        // Different method
+
+                                        // $roles = query("SELECT `id`, `name` FROM `role`");
+                                        
+                                        // foreach ($roles as $role) {
+                                        //     $id = $role['id'];
+                                        //     $name = $role['name'];
+                                        //     $old =old_select('role',$id);
+                                        //     echo "<option $old value='$id'>$name</option>";
+                                        // }
                                         ?>
                                     </select>
                                 </div>

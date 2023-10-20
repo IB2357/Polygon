@@ -1,34 +1,31 @@
 <?php
 $limit = 5;
-$offset = ($PAGE['page_number']-1)*$limit;
-$select_users =
-    "SELECT u.id, u.full_name, u.email, u.profile_img, u.date, r.name AS `role`
-FROM user u
-JOIN role r 
-ON u.role_id = r.id
-ORDER BY u.date
+$offset = ($PAGE['page_number'] - 1) * $limit;
+$select_categories =
+    "SELECT * FROM `category` 
+ORDER BY id
 DESC
 LIMIT $limit
 OFFSET $offset";
-$rows = query($select_users);
+$rows = query($select_categories);
 
 ?>
 <?php if ($action == 'add'):
-    require_once "../app/pages/dashboard/user_crud/add.php";
+    require_once "../app/pages/dashboard/category_crud/add.php";
     ?>
 
 <?php elseif ($action == 'edit'):
-    $row = query("SELECT * FROM user WHERE id = :id LIMIT 1", ['id' => $id]);
+    $row = query("SELECT * FROM category WHERE id = :id LIMIT 1", ['id' => $id]);
     if ($row) {
-        require_once "../app/pages/dashboard/user_crud/edit.php";
+        require_once "../app/pages/dashboard/category_crud/edit.php";
     } else {
         echo '<div class="alert alert-danger my-5 mx-auto">This Record Does Not Exist!</div>';
     }
 ?>
 <?php elseif ($action == 'delete'):
-    $row = query("SELECT * FROM user WHERE id = :id LIMIT 1", ['id' => $id]);
+    $row = query("SELECT * FROM category WHERE id = :id LIMIT 1", ['id' => $id]);
     if ($row) {
-        require_once "../app/pages/dashboard/user_crud/delete.php";
+        require_once "../app/pages/dashboard/category_crud/delete.php";
     } else {
         echo '<div class="alert alert-danger my-5 mx-auto">This Record Does Not Exist!</div>';
     }
@@ -40,7 +37,7 @@ $rows = query($select_users);
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-        <title>users
+        <title>Categories
             <?= APP_NAME ?>
         </title>
         <link rel="stylesheet" href="<?= ROOT ?>/assets/bootstrap/css/bootstrap.min.css">
@@ -55,21 +52,19 @@ $rows = query($select_users);
 
     <body>
         <main>
-            <h1 style="margin: 18px;margin-top: 5px;margin-bottom: 0px;margin-right: 0px;padding-left: 60px;">All Users
-                <a class="btn btn-dark btn-lg mr-2" role="button" href="<?= ROOT ?>/dashboard/users/add">New User</a>
+            <h1 style="margin: 18px;margin-top: 5px;margin-bottom: 0px;margin-right: 0px;padding-left: 60px;">All Categories
+                <a class="btn btn-dark btn-lg mr-2" role="button" href="<?= ROOT ?>/dashboard/categories/add">New
+                    Category</a>
             </h1>
 
             <hr style="border: 5px solid rgb(0,0,0);background: #000000;margin-right: 18px;margin-left: 18px;">
-            <div class="table-responsive mx-5">
-                <table class="table">
+            <div class="table-responsive mx-5 px-0">
+                <table class="table ml-5 ">
                     <tr>
                         <th>#</th>
-                        <th>Profile</th>
-                        <th>Full Name</th>
-                        <th>Email</th>
-                        <th>Role</th>
-                        <th>Creation Date</th>
-                        <th>Action</th>
+                        <th>Category</th>
+                        <th>slug</th>
+                        <th>active</th>
                     </tr>
 
                     <?php if (!empty($rows)): ?>
@@ -80,28 +75,20 @@ $rows = query($select_users);
                                 <td>
                                     <?= esc($counter) ?>
                                 </td>
-                                <td>
-                                    <img src="<?=get_image($row['profile_img'],'avatar.png')?>" style="width:100px; height:100px; object-fit:cover;" alt="profile image">
+                                <td class="pt-5">
+                                    <?= esc($row['category']) ?>
                                 </td>
-                                <td  class="pt-5">
-                                    <?= esc($row['full_name']) ?>
+                                <td class="pt-5">
+                                    <?= esc($row['slug']) ?>
                                 </td>
-                                <td class="pt-5" >
-                                    <?= esc($row['email']) ?>
+                                <td class="pt-5">
+                                    <?=($row['active'])?'on':'off' ?>
                                 </td>
-                                <td  class="pt-5">
-                                    <span class="p-1 border rounded text-primary">
-                                        <?= $row['role'] ?>
-                                    </span>
-                                </td>
-                                <td  class="pt-5">
-                                    <?= date("jS M, Y", strtotime($row['date'])) ?>
-                                </td>
-                                <td  class="pt-5">
+                                <td class="pt-5">
                                     <a class="btn btn-dark mr-2" role="button"
-                                        href="<?= ROOT ?>/dashboard/users/edit/<?= $row['id'] ?>">Edit</a>
+                                        href="<?= ROOT ?>/dashboard/categories/edit/<?= $row['id'] ?>">Edit</a>
                                     <a class="btn btn-outline-dark " role="button"
-                                        href="<?= ROOT ?>/dashboard/users/delete/<?= $row['id'] ?>">Delete</a>
+                                        href="<?= ROOT ?>/dashboard/categories/delete/<?= $row['id'] ?>">Delete</a>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
@@ -110,16 +97,16 @@ $rows = query($select_users);
             </div>
             <hr>
             <div id="pagination" class="d-flex justify-content-center" style="padding-bottom: 0px;">
-            <a
-            class="pagination-item <?=($PAGE['page_number']==1)?'disabled':'active'?>" href="<?=$PAGE['prev_link']?>"><img
-                src="<?= ROOT ?>/assets/img/icon_arrow-left.svg"><span>Previos</span>
-            </a>
-            <a class="pagination-item  <?=($PAGE['page_number']==1)?'disabled':'active'?>"
-            href="<?=$PAGE['first_link']?>">&nbsp;Home&nbsp;
-            </a>
-            <a class="pagination-item" href="<?=$PAGE['next_link']?>"><span>Next</span><img
-                src="<?= ROOT ?>/assets/img/icon_arrow-right.svg">
-            </a>
+                <a class="pagination-item <?= ($PAGE['page_number'] == 1) ? 'disabled' : 'active' ?>"
+                    href="<?= $PAGE['prev_link'] ?>"><img
+                        src="<?= ROOT ?>/assets/img/icon_arrow-left.svg"><span>Previos</span>
+                </a>
+                <a class="pagination-item  <?= ($PAGE['page_number'] == 1) ? 'disabled' : 'active' ?>"
+                    href="<?= $PAGE['first_link'] ?>">&nbsp;Home&nbsp;
+                </a>
+                <a class="pagination-item" href="<?= $PAGE['next_link'] ?>"><span>Next</span><img
+                        src="<?= ROOT ?>/assets/img/icon_arrow-right.svg">
+                </a>
             </div>
         </main>
         <script src="<?= ROOT ?>/assets/js/jquery.min.js"></script>

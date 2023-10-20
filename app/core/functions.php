@@ -16,7 +16,7 @@ function query(string $query, array $data = [])
 
 function redirect($page)
 {
-    header('Location: '.ROOT. '/' . $page);
+    header('Location: ' . ROOT . '/' . $page);
     die;
 }
 
@@ -25,6 +25,20 @@ function old_value($key, $default = '')
     if (!empty($_POST[$key]))
         return $_POST[$key];
     return $default;
+}
+function old_select($key, $value, $default = '', &$g)
+{
+    if ($g == 1) {
+        if (!empty($_POST[$key]) && $_POST[$key] == $value) {
+            $g = 0;
+            return " selected ";
+        }
+        if ($default == $value) {
+            $g = 0;
+            return " selected ";
+        }
+    }
+    return "";
 }
 
 function authenticate($user)
@@ -112,27 +126,30 @@ function resize_image($filename, $max_size = 1000)
         $src_width = imagesx($src_image);
         $src_height = imagesy($src_image);
 
-        if($src_width > $src_height){
-            if($src_width < $max_size)
+        if ($src_width > $src_height) {
+            if ($src_width < $max_size)
                 $max_size = $src_width;
             $dst_width = $max_size;
-            $dst_height = ($src_height/$src_width)*$max_size;
-        }
-        else{
-            if($src_height < $max_size)
+            $dst_height = ($src_height / $src_width) * $max_size;
+        } else {
+            if ($src_height < $max_size)
                 $max_size = $src_height;
             $dst_height = $max_size;
-            $dst_width = ($src_width/$src_height)*$max_size;
+            $dst_width = ($src_width / $src_height) * $max_size;
         }
         $dst_height = round($dst_height);
         $dst_width = round($dst_width);
 
-        $dst_image = imagecreatetruecolor($dst_width,$dst_height);
-        imagecopyresampled($dst_image,$src_image,0,0,0,0,$dst_width,$dst_height,$src_width,$src_height);
-        imagejpeg($dst_image,$filename,90);
+        $dst_image = imagecreatetruecolor($dst_width, $dst_height);
+        imagecopyresampled($dst_image, $src_image, 0, 0, 0, 0, $dst_width, $dst_height, $src_width, $src_height);
+        imagejpeg($dst_image, $filename, 90);
     }
 }
-// echo $_SESSION['user']['profile_img'];
 
-// // echo get_image('uploads/'.$_SESSION['user']['profile_img']);
-// die;
+function p_arr($arr)
+{
+    echo '<pre>';
+    print_r($arr);
+    echo '</pre>';
+    echo '<br>';
+}
