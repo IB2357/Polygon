@@ -92,19 +92,30 @@ $resent_rows = query($select_posts);
             <div class="container py-4 py-xl-5">
                 <div class="row gy-4 gy-md-0">
                     <div class="col-md-6">
-                        <div class="p-xl-5 m-xl-5"><img class="rounded img-fluid w-100 fit-cover" style="min-height: 300px;"
-                                src="<?= get_image($row['poster_img'], 'background_placeholder.png') ?>"></div>
+                        <div class="p-xl-5 m-xl-5">
+                            <a href="<?= ROOT ?>/post/<?= $row['slug'] ?>"><img class="rounded img-fluid w-100 fit-cover"
+                                    style="min-height: 300px;"
+                                    src="<?= get_image($row['poster_img'], 'background_placeholder.png') ?>"></a>
+                        </div>
                     </div>
                     <div class="col-md-6 d-md-flex align-items-md-center">
                         <div style="max-width: 350px;padding-right: 0px;">
-                            <h2 class="text-uppercase fw-bold">
-                                <?= $row['title'] ?>
-                            </h2>
+                            <a href="<?= ROOT ?>/post/<?= $row['slug'] ?>">
+                                <h2 class="text-uppercase fw-bold">
+                                    <?= $row['title'] ?>
+                                </h2>
+                            </a>
+
                             <span class=" mt-1 border rounded text-muted">
-                                    <?= $row['category'] ?>
+                                <?= $row['category'] ?>
                             </span>
-                            <p class="my-3"><?= $row['intro'] ?></p>
-                            <p class="post-meta">Posted by&nbsp;<a href="#"><a href="#"><?= $row['full_name'] ?> on <?= date("jS M, Y", strtotime($row['publish_date'])) ?></a></p>
+                            <p class="my-3">
+                                <?= $row['intro'] ?>
+                            </p>
+                            <p class="post-meta">Posted by&nbsp;<a href="#"><a href="#">
+                                        <?= $row['full_name'] ?> on
+                                        <?= date("jS M, Y", strtotime($row['publish_date'])) ?>
+                                    </a></p>
                         </div>
                     </div>
                 </div>

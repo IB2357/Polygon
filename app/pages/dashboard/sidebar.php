@@ -48,7 +48,7 @@
         <button class="btn btn-dark drawer-knob show-nav" type="button" data-open="drawer"
         style="background: var(--white);color: rgb(0,0,0);border-width: 2px;border-style: solid;margin-right: -19px;"><i
             class="fas fa-bars"></i></button>
-            <div class="d-flex justify-content-between brand-line"><a class="navbar-brand" href="#">
+            <div class="d-flex justify-content-between brand-line"><a class="navbar-brand" href="<?=ROOT?>/home">
                     <?= BRAND_NAME ?>
                 </a><button class="btn btn-dark hide-nav" type="button" data-dismiss="drawer"
                     style="background: var(--white);color: rgb(0,0,0);border-width: 2px;border-style: solid;"><span
@@ -67,17 +67,16 @@
                 </span>
             </a>
             <ul class="navbar-nav flex-column drawer-menu">
-                <li class="nav-item"><a class="nav-link <?=($section=='categories')?'active':''?>" href="<?= ROOT ?>/dashboard/categories">All Categories</a>
-                </li>
+                <li class="nav-item"><a class="nav-link <?=($section=='home')?'active':''?>" href="<?= ROOT ?>/dashboard/home">Home</a></li>
+                <li class="nav-item"><a class="nav-link <?=($section=='categories')?'active':''?>" href="<?= ROOT ?>/dashboard/categories">All Categories</a></li>
+                <?php if(is_admin()):?>
                 <li class="nav-item"><a class="nav-link <?=($section=='posts')?'active':''?>" href="<?= ROOT ?>/dashboard/posts">All Posts</a></li>
                 <li class="nav-item"><a class="nav-link <?=($section=='users')?'active':''?>" href="<?= ROOT ?>/dashboard/users">All Users</a></li>
-
+                <?php endif;?>
             </ul>
             <ul class="navbar-nav flex-column drawer-menu">
-                <li class="nav-item"><a class="nav-link active" href="<?= ROOT ?>/dashboard/post_editer">Create
-                        Article</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">My Drafts</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">My publishes</a></li>
+                <li class="nav-item"><a class="nav-link <?=($section=='drafts')?'active':''?>" href="<?= ROOT ?>/dashboard/drafts">My Drafts</a></li>
+                <li class="nav-item"><a class="nav-link <?=($section=='publishes')?'active':''?>" href="<?= ROOT ?>/dashboard/publishes">My publishes</a></li>
             </ul>
             <ul class="navbar-nav flex-column drawer-menu">
                 <li class="nav-item"><a class="nav-link" href="<?= ROOT ?>/logout">

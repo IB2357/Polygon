@@ -25,6 +25,10 @@ if (!empty($_POST)) {
 
     // save to database
     if (empty($errors)) {
+        $new_content = remove_images_from_content($_POST['body']);
+        $new_content = remove_root_from_content($new_content);
+        $new_content = add_root_to_images($new_content);
+
 
         $data = [];
         $data['title'] = $_POST['title'];
@@ -41,7 +45,7 @@ if (!empty($_POST)) {
             $intro_str = "intro = :intro, ";
         }
         if (!empty($_POST['body'])) {
-            $data['body'] = $_POST['body'];
+            $data['body'] = $new_content;
             $body_str = "body = :body, ";
         }
         
@@ -122,10 +126,9 @@ if (!empty($_POST)) {
 </head>
 
 <body>
-    <div class="container profile profile-view">
         <form method="post" enctype="multipart/form-data">
-            <div class="form-row profile-row">
-                <div class="col-md-8 p-5 mx-auto" style="border-style: solid;">
+            <div class="form-row my-5">
+                <div class="col-md-10 p-4 mx-auto" style="border-style: solid;">
                     <h1>Edit Post #
                         <?= $row[0]['id'] ?>
                     </h1>
@@ -234,8 +237,7 @@ if (!empty($_POST)) {
                         </div>
 
                         <div class="form-group"><label>Body</label>
-
-                            <textarea class="form-control" name="body">
+                            <textarea id="summernote" class="form-control" name="body">
                             <?= old_value('body',$row[0]['body']) ?>
                         </textarea>
                         </div>
@@ -262,12 +264,24 @@ if (!empty($_POST)) {
                 </div>
             </div>
         </form>
-    </div>
+    
+	<link rel="stylesheet" type="text/css" href="<?=ROOT?>/assets/summernote/summernote-lite.min.css">
+
     <script src="<?= ROOT ?>/assets/js/jquery.min.js"></script>
     <script src="<?= ROOT ?>/assets/bootstrap/js/bootstrap.min.js"></script>
     <script src="<?= ROOT ?>/assets/js/Off-Canvas-Sidebar-Drawer-Navbar-swipe.js"></script>
     <script src="<?= ROOT ?>/assets/js/Off-Canvas-Sidebar-Drawer-Navbar-off-canvas-sidebar.js"></script>
     <script src="<?= ROOT ?>/assets/js/Profile-Edit-Form-profile.js"></script>
+
+    <script src="<?=ROOT?>/assets/js/jquery.js"></script>
+	<script src="<?=ROOT?>/assets/summernote/summernote-lite.min.js"></script>
+	<script>
+      $('#summernote').summernote({
+        placeholder: 'Post content',
+        tabsize: 2,
+        height: 400
+      });
+    </script>
 </body>
 
 </html>

@@ -2,7 +2,7 @@
 if (!empty($_POST)) {
     // validation
     $errors = [];
-    $select_user = "SELECT * FROM user WHERE email=:email LIMIT 1";
+    // $select_user = "SELECT * FROM user WHERE email=:email LIMIT 1";
     $select_user = "SELECT u.* , r.name AS `role`
     FROM user u
     JOIN role r 
@@ -16,6 +16,8 @@ if (!empty($_POST)) {
         $data = [];
         if (password_verify($_POST['password'], $row[0]['password'])) {
             authenticate($row[0]);
+            p_arr($_SESSION['user']);
+            
             redirect('/dashboard/home');
         }
     }

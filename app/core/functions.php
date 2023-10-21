@@ -53,6 +53,17 @@ function logged_in()
     return false;
 }
 
+function is_admin()
+{
+    if (!empty($_SESSION['user']))
+        {
+            if($_SESSION['user']['role'] == 'admin'){
+                return true;
+            }
+        }
+    return false;
+}
+
 function slug_creater($str)
 {
     $str = str_replace("'", "", $str);
@@ -153,3 +164,61 @@ function p_arr($arr)
     echo '</pre>';
     echo '<br>';
 }
+
+function  remove_images_from_content($content, $folder = 'uploads/')
+{
+
+	preg_match_all("/<img[^>]+/", $content, $matches);
+
+	if(is_array($matches[0]) && count($matches[0]) > 0)
+	{
+		foreach ($matches[0] as $img) {
+
+			if(!strstr($img, "data:"))
+			{
+				continue;
+			}
+
+			preg_match('/src="[^"]+/', $img, $match);
+			$parts = explode("base64,", $match[0]);
+
+			preg_match('/data-filename="[^"]+/', $img, $file_match);
+
+			$filename = $folder.str_replace('data-filename="', "", $file_match[0]);
+
+			file_put_contents($filename, base64_decode($parts[1]));
+			$content = str_replace($match[0], 'src="'.$filename, $content);
+			
+
+		}
+	}
+	return $content;
+}
+
+
+function add_root_to_images($content)
+{
+
+	preg_match_all("/<img[^>]+/", $content, $matches);
+
+	if(is_array($matches[0]) && count($matches[0]) > 0)
+	{
+		foreach ($matches[0] as $img) {
+
+			preg_match('/src="[^"]+/', $img, $match);
+			$new_img = str_replace('src="', 'src="'.ROOT."/", $img);
+			$content = str_replace($img, $new_img, $content);
+
+		}
+	}
+	return $content;
+}
+
+function remove_root_from_content($content)
+{
+	
+	$content = str_replace(ROOT, "", $content);
+
+	return $content;
+}
+
