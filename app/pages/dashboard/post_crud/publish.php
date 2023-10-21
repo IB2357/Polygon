@@ -1,6 +1,6 @@
 <?php
 if (!empty($_POST)) {
-    $publish_q = "UPDATE post SET `status`='published' WHERE id=:id LIMIT 1";
+    $publish_q = "UPDATE post SET `status`='published', publish_date=CURDATE() WHERE id=:id LIMIT 1";
     query($publish_q,['id'=>$id]);
     redirect('dashboard/posts');
 

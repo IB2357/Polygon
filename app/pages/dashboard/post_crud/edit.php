@@ -50,7 +50,7 @@ if (!empty($_POST)) {
             $image_str = "poster_img = :poster_img, ";
         }
 
-        $update_q = "UPDATE post SET title=:title, $image_str $body_str $intro_str category_id = :category_id, `status`='draft' WHERE id = :id LIMIT 1";
+        $update_q = "UPDATE post SET title=:title, $image_str $body_str $intro_str category_id = :category_id, `status`='draft', update_date=CURDATE() WHERE id = :id LIMIT 1";
 
         query($update_q, $data);
         redirect('dashboard/posts');
@@ -249,7 +249,7 @@ if (!empty($_POST)) {
 
                     <div class="form-row">
                         <div class="col-md-12 content-right">
-                            <input class="btn btn-primary form-btn mt-5 " type="submit" value="Create"
+                            <input class="btn btn-primary form-btn mt-5 " type="submit" value="Save"
                                 style="background: rgb(0,0,0);margin-bottom: 0px;">
 
                             <a href="<?= ROOT ?>/dashboard/posts">

@@ -53,6 +53,12 @@ if (!empty($_POST)) {
     <link rel="stylesheet" href="<?= ROOT ?>/assets/css/Gamanet_Pagination_bs5.css">
     <link rel="stylesheet" href="<?= ROOT ?>/assets/css/Gamanet_Sidebar_bs5.css">
     <link rel="stylesheet" href="<?= ROOT ?>/assets/css/Navbar-Right-Links-icons.css">
+
+    <link rel="stylesheet" href="<?= ROOT ?>/assets/bootstrap-h/css/bootstrap.min.css">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800&amp;display=swap">        
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Arbutus+Slab">
+    <link rel="stylesheet" href="<?= ROOT ?>/assets/fonts/font-awesome.min.css">
 </head>
 
 <body>
