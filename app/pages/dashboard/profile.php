@@ -1,5 +1,6 @@
 <?php
 $row = $_SESSION['user'];
+// p_arr($row);die;
 $id = $row['id'];
 if (!empty($_POST)) {
     // validation
@@ -49,6 +50,7 @@ if (!empty($_POST)) {
         // $data['about'] = $_POST['about'];
         $data['role_id'] = $_POST['role'];
         $data['id'] = $id;
+        $data['active'] = $_POST['active'];
 
         // check if password empty
         // if (empty($_POST['password'])) {
@@ -76,11 +78,24 @@ if (!empty($_POST)) {
             $image_str = "profile_img = :profile_img, ";
         }
 
-        $update_q = "UPDATE user SET full_name = :full_name, email = :email, $image_str $about_str $password_str role_id = :role_id WHERE id = :id LIMIT 1";
+        $update_q = "UPDATE user SET full_name = :full_name, email = :email, $image_str $about_str $password_str role_id = :role_id, active=:active WHERE id = :id LIMIT 1";
 
         query($update_q, $data);
-        redirect('dashboard/home');
+        
+
+        // for sessen
+        $select_user = "SELECT u.* , r.name AS `role`
+    FROM user u
+    JOIN role r 
+    ON u.role_id = r.id
+    WHERE email=:email
+    LIMIT 1";
+        $row = query($select_user, ['email' => $_POST['email']]);
     }
+    authenticate($row[0]);
+    p_arr($_SESSION['user']);
+
+    redirect('dashboard/home');
 }
 ?>
 <!DOCTYPE html>
@@ -244,12 +259,23 @@ if (!empty($_POST)) {
                                             ?>
                                         </select>
                                     </div>
+                                    <div class="form-check form-check-inline">
+                                        <label class="form-check-label mr-2 " for="active">Active</label>
+                                        <select name="active" id="active">
+                                            <?php $g = 1; ?>
+                                            <option value="0" <?= old_select('active', 0, $row['active'], $g) ?>>off</option>
+                                            <?php $g = 1; ?>
+                                            <option value="1" <?= old_select('active', 1, $row['active'], $g) ?>>on</option>
+                                        </select>
+                                    </div>
                                 </div>
                             <?php else: ?>
                                 <div class="col-sm-12 col-md-6">
                                     <div class="form-group"><label>User Role</label>
                                         <select class="form-control" name="role">
-                                           <option value="<?=$_SESSION['user']['role_id']?>"><?=$_SESSION['user']['role']?></option>
+                                            <option value="<?= $_SESSION['user']['role_id'] ?>">
+                                                <?= $_SESSION['user']['role'] ?>
+                                            </option>
                                         </select>
                                     </div>
                                 </div>

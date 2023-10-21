@@ -1,14 +1,15 @@
 <?php
+
 $limit = 5;
 $offset = ($PAGE['page_number']-1)*$limit;
 $select_users =
-    "SELECT u.id, u.full_name, u.email, u.profile_img, u.date, r.name AS `role`
-FROM user u
-JOIN role r 
-ON u.role_id = r.id
-ORDER BY u.date
-DESC
-LIMIT $limit
+    "SELECT u.id, u.full_name, u.email, u.profile_img,u.active, u.date, r.name  AS `role`
+    FROM user u
+    JOIN `role` r 
+    ON u.role_id = r.id
+    ORDER BY u.date
+    DESC
+    LIMIT $limit
 OFFSET $offset";
 $rows = query($select_users);
 
@@ -96,6 +97,9 @@ $rows = query($select_users);
                                 </td>
                                 <td  class="pt-5">
                                     <?= date("jS M, Y", strtotime($row['date'])) ?>
+                                </td>
+                                <td class="pt-5">
+                                    <?=($row['active'])?'on':'off' ?>
                                 </td>
                                 <td  class="pt-5">
                                     <a class="btn btn-dark mr-2" role="button"

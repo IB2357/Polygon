@@ -39,14 +39,15 @@ if (!empty($_POST)) {
     }
     // save to database
     if (empty($errors)) {
-        $insert_q = "INSERT INTO user(full_name, email, about, password, role_id) 
-        VALUES (:full_name,:email,:about,:password,:role_id)";
+        $insert_q = "INSERT INTO user(full_name, email, about, password, role_id, active) 
+        VALUES (:full_name,:email,:about,:password,:role_id, :active)";
         $data = [];
         $data['full_name'] = $_POST['full_name'];
         $data['email'] = $_POST['email'];
         $data['about'] = $_POST['about'];
         $data['password'] = password_hash($_POST['password'], PASSWORD_DEFAULT);
         $data['role_id'] = $_POST['role'];
+        $data['active'] = $_POST['active'];
 
         if (!empty($destination)) {
             $data['profile_img'] = $destination;
@@ -189,19 +190,19 @@ if (!empty($_POST)) {
                                                 $id = $role['id'];
                                                 $name = $role['name'];
                                                 echo '<option value="' . "$id" . '">' . "$name" . '</option>';
-                                            }         
-                                        }else{
+                                            }
+                                        } else {
                                             foreach ($roles as $role) {
                                                 $id = $role['id'];
                                                 $name = $role['name'];
                                                 echo '<option value="' . "$id" . '">' . "$name" . '</option>';
                                             }
-                                        }              
-                                        
+                                        }
+
 
 
                                         // Different method
-
+                                        
                                         // $roles = query("SELECT `id`, `name` FROM `role`");
                                         
                                         // foreach ($roles as $role) {
@@ -212,7 +213,16 @@ if (!empty($_POST)) {
                                         // }
                                         ?>
                                     </select>
+                                    
                                 </div>
+                                <div class="form-check form-check-inline">
+                                        <label class="form-check-label mr-2 " for="active">Active </label>
+                                        <select name="active" id="active">
+                                            <?php $g = 1; ?>
+                                            <option value="0" <?= old_select('active', 0, '', $g) ?>>off</option>
+                                            <option value="1" <?= old_select('active', 1, '', $g) ?>>on</option>
+                                        </select>
+                                    </div>
                             </div>
                         </div>
                         <div class="form-group"><label>About</label><textarea class="form-control"

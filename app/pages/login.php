@@ -15,10 +15,13 @@ if (!empty($_POST)) {
     if ($row) {
         $data = [];
         if (password_verify($_POST['password'], $row[0]['password'])) {
+            if($row[0]['active']!=0){
             authenticate($row[0]);
             p_arr($_SESSION['user']);
             
             redirect('/dashboard/home');
+            }
+            $errors['active'] = "this account is not active";
         }
     }
     $errors['email'] = "wrong email or password";

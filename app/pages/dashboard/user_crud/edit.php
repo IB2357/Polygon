@@ -47,6 +47,7 @@ if (!empty($_POST)) {
         // $data['about'] = $_POST['about'];
         $data['role_id'] = $_POST['role'];
         $data['id'] = $id;
+        $data['active'] = $_POST['active'];
 
         // check if password empty
         // if (empty($_POST['password'])) {
@@ -74,7 +75,7 @@ if (!empty($_POST)) {
             $image_str = "profile_img = :profile_img, ";
         }
 
-        $update_q = "UPDATE user SET full_name = :full_name, email = :email, $image_str $about_str $password_str role_id = :role_id WHERE id = :id LIMIT 1";
+        $update_q = "UPDATE user SET full_name = :full_name, email = :email, $image_str $about_str $password_str role_id = :role_id, active=:active WHERE id = :id LIMIT 1";
 
         query($update_q, $data);
         redirect('dashboard/users');
@@ -244,7 +245,16 @@ if (!empty($_POST)) {
                                         // }
                                         ?>
                                     </select>
+
                                 </div>
+                                <div class="form-check form-check-inline">
+                                        <label class="form-check-label mr-2 " for="active">Active </label>
+                                        <select name="active" id="active">
+                                            <?php $g = 1; ?>
+                                            <option value="0" <?= old_select('active', 0, '', $g) ?>>off</option>
+                                            <option value="1" <?= old_select('active', 1, '', $g) ?>>on</option>
+                                        </select>
+                                    </div>
                             </div>
                         </div>
                         <div class="form-group"><label>About</label><textarea class="form-control"

@@ -66,15 +66,18 @@ if (!empty($_POST)) {
                                 </div>
                             <?php endif; ?>
                         </div>
-
+                        <?php if (is_admin()): ?>
                         <div class="form-check form-check-inline">
                             <label class="form-check-label mr-2 " for="active">Active </label>
                             <select name="active" id="active">
+                            
                             <?php $g = 1; ?>
                                 <option value="0" <?=old_select('active',0,'',$g)?> >off</option>
                                 <option value="1" <?=old_select('active',1,'',$g)?> >on</option>
                             </select>
+                           
                         </div>
+                        <?php endif; ?>
                     </div>
 
 

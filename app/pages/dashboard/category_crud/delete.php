@@ -1,13 +1,22 @@
 <?php
 if (!empty($_POST)) {
-    $data = [];
-    $data['id'] = $id;
+    $errors = [];
+    $validate_post = "SELECT category_id FROM post WHERE category_id=:id";
+    $connected_posts = query($validate_post, ['id' => $id]);
+    if (!empty($connected_posts))
+        $errors['connected_posts'] = "there are connected post to this";
 
-    $delete_q = "DELETE FROM category WHERE id = :id LIMIT 1";
-    query($delete_q, $data);
-    redirect('dashboard/categories');
+    if (empty($errors)) {
+        $data['id'] = $id;
+        $delete_q = "DELETE FROM category WHERE id = :id LIMIT 1";
+        query($delete_q, $data);
+        redirect('dashboard/categories');
+    }
+
+
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -30,18 +39,24 @@ if (!empty($_POST)) {
     <div class="container profile profile-view">
         <form method="post">
             <div class="form-row profile-row">
+                
                 <div class="col-md-8 p-5 mx-auto" style="border-style: solid;">
+                <?php if (!empty($errors['connected_posts'])): ?>
+                    <div class="text-danger mb-3 mt-1">
+                        <?= $errors['connected_posts'] ?>
+                    </div>
+                <?php endif; ?>
                     <h1>Delete category #
                         <?= $row[0]['id'] ?>
                     </h1>
 
                     <div class="form-group"><label>Category</label>
-                        <input readonly class="form-control" value="<?=esc($row[0]['category'])?>"
-                            type="text" name="Category">
+                        <input readonly class="form-control" value="<?= esc($row[0]['category']) ?>" type="text"
+                            name="Category">
                     </div>
                     <div class="form-group"><label>Slug</label>
-                        <input readonly class="form-control" value="<?=esc($row[0]['slug'])?>"
-                            type="text" name="slug">
+                        <input readonly class="form-control" value="<?= esc($row[0]['slug']) ?>" type="text"
+                            name="slug">
                     </div>
                     <div class="form-row">
                         <div class="col-md-12 content-right">

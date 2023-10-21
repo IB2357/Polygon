@@ -7,7 +7,8 @@
     $id = $url[3] ?? 0;
     $file_name = "../app/pages/dashboard/".$section.".php";
 
-    $admin_sections = ['posts','users'];
+    // $admin_sections = ['posts','users'];
+    $admin_sections = ['users'];
     if(!is_admin() && in_array($section,$admin_sections)){
         redirect('dashboard/home');
     }

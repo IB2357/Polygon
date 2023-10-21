@@ -84,12 +84,15 @@ $rows = query($select_categories);
                                 <td class="pt-5">
                                     <?=($row['active'])?'on':'off' ?>
                                 </td>
+                                <?php if(is_admin()):?>
                                 <td class="pt-5">
                                     <a class="btn btn-dark mr-2" role="button"
                                         href="<?= ROOT ?>/dashboard/categories/edit/<?= $row['id'] ?>">Edit</a>
                                     <a class="btn btn-outline-dark " role="button"
                                         href="<?= ROOT ?>/dashboard/categories/delete/<?= $row['id'] ?>">Delete</a>
                                 </td>
+                                <?php endif;?>
+
                             </tr>
                         <?php endforeach; ?>
                     <?php endif; ?>

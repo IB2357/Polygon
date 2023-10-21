@@ -43,7 +43,7 @@ $resent_rows = query($select_posts);
     <link rel="stylesheet" href="<?= ROOT ?>/assets/css/Navbar-Right-Links-icons.css">
 </head>
 
-<body>
+<body style=" ">
     <?php include_once "parts/nav.php"; ?>
     <?php if ($PAGE['page_number'] < 2): ?>
         <h2
